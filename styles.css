@@ -34,6 +34,7 @@ a {
   color: inherit;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.22em;
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
 }
 
 a:hover,
@@ -144,6 +145,8 @@ h1 {
 .signal-figure {
   display: grid;
   gap: 10px;
+  position: relative;
+  overflow: hidden;
 }
 
 .signal-figure img {
@@ -201,6 +204,7 @@ h2 {
   gap: 28px;
   padding: 22px 0;
   border-top: 1px solid var(--line);
+  transition: background-color 220ms ease, border-color 220ms ease, transform 220ms ease;
 }
 
 .entry:first-child,
@@ -267,6 +271,139 @@ dt {
   margin-top: 8px;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  body {
+    animation: grid-drift 34s linear infinite;
+  }
+
+  .signal-figure::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    bottom: 28px;
+    left: -24%;
+    z-index: 2;
+    width: 22%;
+    background: linear-gradient(90deg, transparent, rgba(13, 13, 12, 0.18), transparent);
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    animation: signal-scan 5.8s ease-in-out infinite;
+  }
+
+  .signal-figure::after {
+    content: "";
+    position: absolute;
+    top: 24%;
+    right: 22%;
+    z-index: 3;
+    width: 9px;
+    height: 9px;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    box-shadow: 0 0 0 0 rgba(13, 13, 12, 0.28);
+    pointer-events: none;
+    animation: node-pulse 2.8s ease-out infinite;
+  }
+
+  .signal-figure img {
+    animation: signal-float 9s ease-in-out infinite;
+  }
+
+  .project-row:hover,
+  .entry:hover,
+  .skills-list div:hover {
+    border-top-color: var(--line-strong);
+    background: rgba(13, 13, 12, 0.035);
+    transform: translateX(6px);
+  }
+
+  .motion-enabled [data-animate] {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 700ms ease, transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition-delay: var(--motion-delay, 0ms);
+  }
+
+  .motion-enabled [data-animate].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .motion-enabled .project-row[data-animate].is-visible:hover,
+  .motion-enabled .entry[data-animate].is-visible:hover,
+  .motion-enabled .skills-list div[data-animate].is-visible:hover {
+    transform: translateX(6px);
+  }
+
+  @keyframes grid-drift {
+    from {
+      background-position: 0 0, 0 0, 0 0;
+    }
+
+    to {
+      background-position: 80px 0, 0 80px, 0 0;
+    }
+  }
+
+  @keyframes signal-scan {
+    0%,
+    18% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+
+    28%,
+    72% {
+      opacity: 1;
+    }
+
+    88%,
+    100% {
+      transform: translateX(570%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes node-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(13, 13, 12, 0.35);
+    }
+
+    70% {
+      box-shadow: 0 0 0 18px rgba(13, 13, 12, 0);
+    }
+
+    100% {
+      box-shadow: 0 0 0 0 rgba(13, 13, 12, 0);
+    }
+  }
+
+  @keyframes signal-float {
+    0%,
+    100% {
+      transform: translateY(0) scale(1);
+    }
+
+    50% {
+      transform: translateY(-4px) scale(1.01);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
 @media (max-width: 840px) {
   body {
     background-size: 56px 56px;
@@ -299,6 +436,15 @@ dt {
   .project-row span {
     justify-self: start;
     text-align: left;
+  }
+
+  .project-row:hover,
+  .entry:hover,
+  .skills-list div:hover,
+  .motion-enabled .project-row[data-animate].is-visible:hover,
+  .motion-enabled .entry[data-animate].is-visible:hover,
+  .motion-enabled .skills-list div[data-animate].is-visible:hover {
+    transform: none;
   }
 }
 

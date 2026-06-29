@@ -9,6 +9,7 @@ Live site: https://aanh1009.github.io/personal-landing-page/
 - Monochrome palette inspired by sparse research-lab websites.
 - Information-first layout with resume-driven sections.
 - No build system, no framework, no third-party scripts.
+- Small vanilla JavaScript motion layer with reduced-motion support.
 - One generated visual asset: `assets/work-signal.png`.
 
 ## Content
